@@ -484,7 +484,7 @@ mod from_header_name_tests {
 
     #[test]
     fn it_can_insert_header_name_as_header_value() {
-        let mut map = HeaderMap::new();
+        let mut map = HeaderMap::<HeaderValue>::new();
         map.insert(name::UPGRADE, name::SEC_WEBSOCKET_PROTOCOL.into());
         map.insert(
             name::ACCEPT,

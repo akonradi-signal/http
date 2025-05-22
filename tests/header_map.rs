@@ -3,7 +3,7 @@ use http::*;
 
 #[test]
 fn smoke() {
-    let mut headers = HeaderMap::new();
+    let mut headers = HeaderMap::<HeaderValue>::new();
 
     assert!(headers.get("hello").is_none());
 
@@ -89,7 +89,7 @@ fn reserve() {
 
 #[test]
 fn drain() {
-    let mut headers = HeaderMap::new();
+    let mut headers = HeaderMap::<HeaderValue>::new();
 
     // Insert a single value
     let name: HeaderName = "hello".parse().unwrap();
@@ -145,7 +145,7 @@ fn drain() {
 fn drain_drop_immediately() {
     // test mem::forgetting does not double-free
 
-    let mut headers = HeaderMap::new();
+    let mut headers = HeaderMap::<HeaderValue>::new();
     headers.insert("hello", "world".parse().unwrap());
     headers.insert("zomg", "bar".parse().unwrap());
     headers.append("hello", "world2".parse().unwrap());
@@ -177,7 +177,7 @@ fn drain_forget() {
 
 #[test]
 fn drain_entry() {
-    let mut headers = HeaderMap::new();
+    let mut headers = HeaderMap::<HeaderValue>::new();
 
     headers.insert(
         "hello".parse::<HeaderName>().unwrap(),
@@ -219,7 +219,7 @@ fn drain_entry() {
 
 #[test]
 fn eq() {
-    let mut a = HeaderMap::new();
+    let mut a = HeaderMap::<HeaderValue>::new();
     let mut b = HeaderMap::new();
 
     assert_eq!(a, b);
@@ -256,7 +256,7 @@ fn eq() {
 
 #[test]
 fn into_header_name() {
-    let mut m = HeaderMap::new();
+    let mut m = HeaderMap::<HeaderValue>::new();
     m.insert(HOST, "localhost".parse().unwrap());
     m.insert(&ACCEPT, "*/*".parse().unwrap());
     m.insert("connection", "keep-alive".parse().unwrap());
@@ -286,7 +286,7 @@ fn as_header_name() {
 
 #[test]
 fn insert_all_std_headers() {
-    let mut m = HeaderMap::new();
+    let mut m = HeaderMap::<HeaderValue>::new();
 
     for (i, hdr) in STD.iter().enumerate() {
         m.insert(hdr.clone(), hdr.as_str().parse().unwrap());
@@ -310,7 +310,7 @@ fn insert_all_std_headers() {
 
 #[test]
 fn insert_79_custom_std_headers() {
-    let mut h = HeaderMap::new();
+    let mut h = HeaderMap::<HeaderValue>::new();
     let hdrs = custom_std(79);
 
     for (i, hdr) in hdrs.iter().enumerate() {
@@ -328,7 +328,7 @@ fn insert_79_custom_std_headers() {
 
 #[test]
 fn append_multiple_values() {
-    let mut map = HeaderMap::new();
+    let mut map = HeaderMap::<HeaderValue>::new();
 
     map.append(header::CONTENT_TYPE, "json".parse().unwrap());
     map.append(header::CONTENT_TYPE, "html".parse().unwrap());
@@ -431,7 +431,7 @@ const STD: &'static [HeaderName] = &[
 
 #[test]
 fn get_invalid() {
-    let mut headers = HeaderMap::new();
+    let mut headers = HeaderMap::<HeaderValue>::new();
     headers.insert("foo", "bar".parse().unwrap());
     assert!(headers.get("Evil\r\nKey").is_none());
 }
@@ -439,7 +439,7 @@ fn get_invalid() {
 #[test]
 #[should_panic]
 fn insert_invalid() {
-    let mut headers = HeaderMap::new();
+    let mut headers = HeaderMap::<HeaderValue>::new();
     headers.insert("evil\r\nfoo", "bar".parse().unwrap());
 }
 
@@ -453,7 +453,7 @@ fn value_htab() {
 
 #[test]
 fn remove_multiple_a() {
-    let mut headers = HeaderMap::new();
+    let mut headers = HeaderMap::<HeaderValue>::new();
     headers.insert(VIA, "1.1 example.com".parse().unwrap());
     headers.insert(SET_COOKIE, "cookie_1=value 1".parse().unwrap());
     headers.append(SET_COOKIE, "cookie_2=value 2".parse().unwrap());
@@ -478,7 +478,7 @@ fn remove_multiple_a() {
 
 #[test]
 fn remove_multiple_b() {
-    let mut headers = HeaderMap::new();
+    let mut headers = HeaderMap::<HeaderValue>::new();
     headers.insert(VIA, "1.1 example.com".parse().unwrap());
     headers.insert(SET_COOKIE, "cookie_1=value 1".parse().unwrap());
     headers.append(SET_COOKIE, "cookie_2=value 2".parse().unwrap());

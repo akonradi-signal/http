@@ -430,7 +430,7 @@ macro_rules! insert_phase_one {
 
 // ===== impl HeaderMap =====
 
-impl HeaderMap {
+impl<T> HeaderMap<T> {
     /// Create an empty `HeaderMap`.
     ///
     /// The map will be created without any capacity. This function will not
@@ -445,14 +445,7 @@ impl HeaderMap {
     /// assert!(map.is_empty());
     /// assert_eq!(0, map.capacity());
     /// ```
-    #[inline]
     pub fn new() -> Self {
-        Self::default()
-    }
-}
-
-impl<T> Default for HeaderMap<T> {
-    fn default() -> Self {
         HeaderMap {
             mask: 0,
             indices: Box::new([]), // as a ZST, this doesn't actually allocate anything
@@ -2168,6 +2161,13 @@ impl<T: Eq> Eq for HeaderMap<T> {}
 impl<T: fmt::Debug> fmt::Debug for HeaderMap<T> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_map().entries(self.iter()).finish()
+    }
+}
+
+impl<T> Default for HeaderMap<T> {
+    #[inline]
+    fn default() -> Self {
+        HeaderMap::new()
     }
 }
 
